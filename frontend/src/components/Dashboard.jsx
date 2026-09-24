@@ -35,7 +35,6 @@ function Dashboard({ session }) {
 
       if (!mounted) return;
 
-      // Profile lookups 404 (PGRST116) for brand-new accounts before the signup trigger settles, so ignore that case.
       const firstError = [profileRes, tasksRes, goalsRes, notesRes, financesRes, eventsRes]
         .find((result) => result.error && result.error.code !== 'PGRST116');
 
@@ -67,6 +66,10 @@ function Dashboard({ session }) {
     await supabase.auth.signOut();
   }
 
+  function updateNotes(notes) {
+    setData((currentData) => currentData ? { ...currentData, notes } : currentData);
+  }
+
   const displayName = data?.profile?.first_name || session.user.user_metadata?.username || session.user.email;
 
   return (
@@ -94,7 +97,7 @@ function Dashboard({ session }) {
             {activeSection === 'overview' && <OverviewSection data={data} displayName={displayName} />}
             {activeSection === 'tasks' && <TasksSection tasks={data.tasks} />}
             {activeSection === 'goals' && <GoalsSection goals={data.goals} />}
-            {activeSection === 'notes' && <NotesSection notes={data.notes} />}
+            {activeSection === 'notes' && <NotesSection notes={data.notes} userId={session.user.id} onNotesChange={updateNotes} />}
             {activeSection === 'finance' && <FinanceSection finances={data.finances} />}
             {activeSection === 'events' && <EventsSection events={data.events} />}
             {activeSection === 'profile' && <ProfileSection profile={data.profile} email={session.user.email} />}
