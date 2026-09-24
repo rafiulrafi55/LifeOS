@@ -86,6 +86,40 @@ input:focus { border-color: #a3813e; box-shadow: 0 0 0 3px rgba(208, 169, 79, .1
 .dashboard-panel .badge { padding: 3px 9px; border-radius: 20px; color: #907334; background: #f3e9d3; font-size: 10px; font-weight: 700; text-transform: uppercase; }
 .empty-state { margin: 0; color: #a0a69f; font-size: 13px; }
 
+.workspace-shell { display: grid; grid-template-columns: 220px 1fr; align-items: start; max-width: 1240px; margin: 0 auto; padding: 32px 6vw 80px; gap: 32px; }
+.sidebar { position: sticky; top: 32px; display: grid; gap: 4px; }
+.sidebar button { display: flex; align-items: center; gap: 11px; padding: 10px 14px; border: 0; border-radius: 5px; color: #53635b; background: transparent; font-size: 13px; font-weight: 700; text-align: left; transition: background .2s, color .2s; }
+.sidebar button:hover { background: #efece3; }
+.sidebar button.active { color: #23443a; background: #e7f2e9; }
+.workspace-main { min-width: 0; }
+.workspace-main .dashboard { padding: 0; }
+.section { max-width: 100%; }
+.section h1 { margin: 0 0 24px; color: #23443a; font-size: clamp(24px, 3vw, 34px); letter-spacing: -.04em; }
+
+.record-list { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.record-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 20px; border: 1px solid #dedbd2; border-radius: 6px; background: #fffefa; }
+.record-title { margin: 0; color: #23312b; font-size: 14px; font-weight: 700; }
+.record-sub { margin: 4px 0 0; color: #7b857e; font-size: 12px; }
+.record-meta { display: flex; align-items: center; gap: 10px; color: #53635b; font-size: 12px; white-space: nowrap; }
+.record-meta .badge { padding: 3px 9px; border-radius: 20px; color: #907334; background: #f3e9d3; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+.amount-positive { color: #316b52; font-weight: 700; }
+.amount-negative { color: #984d3d; font-weight: 700; }
+
+.progress-track { width: 220px; height: 6px; margin-top: 10px; border-radius: 4px; background: #ece9df; overflow: hidden; }
+.progress-fill { height: 100%; background: #d0a94f; }
+
+.notes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+.note-card { padding: 18px 20px; border: 1px solid #dedbd2; border-radius: 6px; background: #fffefa; }
+
+.profile-card { display: grid; gap: 14px; max-width: 480px; padding: 22px 24px; border: 1px solid #dedbd2; border-radius: 6px; background: #fffefa; }
+.profile-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px; color: #23312b; }
+
+@media (max-width: 900px) {
+  .workspace-shell { grid-template-columns: 1fr; }
+  .sidebar { position: static; display: flex; flex-wrap: wrap; gap: 8px; }
+  .sidebar button { flex: 1 1 auto; justify-content: center; }
+}
+
 @media (max-width: 760px) {
   .auth-layout { display: block; }
   .brand-panel { display: none; }
