@@ -3,6 +3,11 @@ import { ArrowRight, Check, Eye, EyeOff, LockKeyhole, Mail, Sparkles } from 'luc
 import { supabase } from '../lib/supabase';
 import { authApi } from '../lib/api';
 
+// origin alone omits Vite's base path (e.g. GitHub Pages project subpath)
+function getRedirectUrl() {
+  return `${window.location.origin}${import.meta.env.BASE_URL}`;
+}
+
 function AuthScreen() {
   const [mode, setMode] = useState('login');
   const [form, setForm] = useState({ username: '', firstName: '', lastName: '', email: '', password: '' });
@@ -67,7 +72,7 @@ function AuthScreen() {
     }
 
     try {
-      await authApi.requestPasswordReset({ email: form.email, redirectTo: window.location.origin });
+      await authApi.requestPasswordReset({ email: form.email, redirectTo: getRedirectUrl() });
       setStatus({ type: 'success', message: 'Password reset instructions are on their way.' });
     } catch (error) {
       setStatus({ type: 'error', message: error.message });
@@ -79,7 +84,7 @@ function AuthScreen() {
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
-      options: { redirectTo: window.location.origin },
+      options: { redirectTo: getRedirectUrl() },
     });
 
     if (error) {
