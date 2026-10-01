@@ -70,6 +70,12 @@ function Dashboard({ session }) {
     setData((currentData) => currentData ? { ...currentData, notes } : currentData);
   }
 
+  function updateProfile(updatedProfile) {
+    setData((currentData) =>
+      currentData ? { ...currentData, profile: { ...currentData.profile, ...updatedProfile } } : currentData
+    );
+  }
+
   const displayName = data?.profile?.first_name || session.user.user_metadata?.username || session.user.email;
 
   return (
@@ -100,7 +106,14 @@ function Dashboard({ session }) {
             {activeSection === 'notes' && <NotesSection notes={data.notes} userId={session.user.id} onNotesChange={updateNotes} />}
             {activeSection === 'finance' && <FinanceSection finances={data.finances} />}
             {activeSection === 'events' && <EventsSection events={data.events} />}
-            {activeSection === 'profile' && <ProfileSection profile={data.profile} email={session.user.email} />}
+            {activeSection === 'profile' && (
+              <ProfileSection
+                profile={data.profile}
+                email={session.user.email}
+                userId={session.user.id}
+                onProfileUpdate={updateProfile}
+              />
+            )}
           </div>
         </div>
       )}

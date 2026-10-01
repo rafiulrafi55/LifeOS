@@ -256,3 +256,65 @@ for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
 drop policy if exists events_own on public.events;
 create policy events_own on public.events
 for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- Storage bucket for user avatars / profile photos
+-- Size limited to 2 MB (2,097,152 bytes)
+-- Restricted to image file types
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'avatars',
+  'avatars',
+  true,
+  2097152, -- 2 MB
+  array['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+)
+on conflict (id) do update set
+  public = excluded.public,
+  file_size_limit = excluded.file_size_limit,
+  allowed_mime_types = excluded.allowed_mime_types;
+
+-- Storage RLS Policies for avatars bucket
+-- 1. Public can view avatars (allows displaying in profile section)
+drop policy if exists "Avatars are publicly accessible" on storage.objects;
+create policy "Avatars are publicly accessible" on storage.objects
+for select using (bucket_id = 'avatars');
+
+-- 2. Authenticated users can upload photo to their own folder (<user_id>/<file>)
+drop policy if exists "Users can upload their own avatar" on storage.objects;
+create policy "Users can upload their own avatar" on storage.objects
+for insert to authenticated with check (
+  bucket_id = 'avatars'
+  and (
+    (storage.foldername(name))[1] = auth.uid()::text
+    or split_part(name, '/', 1) = auth.uid()::text
+  )
+);
+
+-- 3. Authenticated users can update their own avatar
+drop policy if exists "Users can update their own avatar" on storage.objects;
+create policy "Users can update their own avatar" on storage.objects
+for update to authenticated using (
+  bucket_id = 'avatars'
+  and (
+    (storage.foldername(name))[1] = auth.uid()::text
+    or split_part(name, '/', 1) = auth.uid()::text
+  )
+) with check (
+  bucket_id = 'avatars'
+  and (
+    (storage.foldername(name))[1] = auth.uid()::text
+    or split_part(name, '/', 1) = auth.uid()::text
+  )
+);
+
+-- 4. Authenticated users can delete their own avatar
+drop policy if exists "Users can delete their own avatar" on storage.objects;
+create policy "Users can delete their own avatar" on storage.objects
+for delete to authenticated using (
+  bucket_id = 'avatars'
+  and (
+    (storage.foldername(name))[1] = auth.uid()::text
+    or split_part(name, '/', 1) = auth.uid()::text
+  )
+);
+
