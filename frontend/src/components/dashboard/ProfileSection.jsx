@@ -3,19 +3,17 @@ import { Camera, CheckCircle2, AlertCircle, Eye, EyeOff, Loader2, User, KeyRound
 import { supabase } from '../../lib/supabase';
 import { compressImageUnderLimit } from '../../lib/imageCompression';
 
-const MAX_BYTES = 2 * 1024 * 1024; // 2 MB
+const MAX_BYTES = 2 * 1024 * 1024;
 
 function ProfileSection({ profile, email, userId, onProfileUpdate }) {
-  const [activeTab, setActiveTab] = useState('personal'); // 'personal' | 'password' | 'timezone'
+  const [activeTab, setActiveTab] = useState('personal');
 
-  // Personal info form state (email removed as it's unchangeable)
   const [personalData, setPersonalData] = useState({
     username: profile?.username || '',
     first_name: profile?.first_name || '',
     last_name: profile?.last_name || '',
   });
 
-  // Password change state
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
     password: '',
@@ -25,12 +23,10 @@ function ProfileSection({ profile, email, userId, onProfileUpdate }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // Timezone state with free API dropdown
   const [selectedTimezone, setSelectedTimezone] = useState(profile?.timezone || 'UTC');
   const [timezoneList, setTimezoneList] = useState([]);
   const [isLoadingTimezones, setIsLoadingTimezones] = useState(false);
 
-  // Status & feedback indicators
   const [avatarUrl, setAvatarUrl] = useState(profile?.avatar_url || '');
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
   const [photoMessage, setPhotoMessage] = useState({ text: '', type: '' });
@@ -46,7 +42,6 @@ function ProfileSection({ profile, email, userId, onProfileUpdate }) {
 
   const fileInputRef = useRef(null);
 
-  // Sync state if profile prop changes
   useEffect(() => {
     if (profile) {
       setPersonalData({
@@ -59,7 +54,6 @@ function ProfileSection({ profile, email, userId, onProfileUpdate }) {
     }
   }, [profile]);
 
-  // Fetch available timezones using free API with browser fallback
   useEffect(() => {
     let isMounted = true;
     async function fetchTimezones() {
@@ -73,7 +67,6 @@ function ProfileSection({ profile, email, userId, onProfileUpdate }) {
           return;
         }
       } catch {
-        // Fallback to Intl API if network API is unavailable
       }
 
       if (isMounted) {
@@ -118,7 +111,6 @@ function ProfileSection({ profile, email, userId, onProfileUpdate }) {
     setPasswordData((prev) => ({ ...prev, [name]: value }));
   }
 
-  // Handle avatar upload with automatic compression for >2 MB images
   async function handleAvatarSelect(e) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -129,7 +121,6 @@ function ProfileSection({ profile, email, userId, onProfileUpdate }) {
     try {
       let uploadFile = file;
 
-      // If file exceeds 2 MB, compress automatically
       if (file.size > MAX_BYTES) {
         setPhotoMessage({
           text: `Photo is ${(file.size / (1024 * 1024)).toFixed(1)}MB. Compressing under 2MB...`,
@@ -144,7 +135,6 @@ function ProfileSection({ profile, email, userId, onProfileUpdate }) {
       const fileName = `${Date.now()}.${fileExt}`;
       const filePath = `${userId}/${fileName}`;
 
-      // Upload to Supabase Storage in 'avatars' bucket
       const { error: uploadError } = await supabase.storage
         .from('avatars')
         .upload(filePath, uploadFile, {
@@ -154,14 +144,12 @@ function ProfileSection({ profile, email, userId, onProfileUpdate }) {
 
       if (uploadError) throw uploadError;
 
-      // Get public URL
       const { data: { publicUrl } } = supabase.storage
         .from('avatars')
         .getPublicUrl(filePath);
 
       const refreshedUrl = `${publicUrl}?t=${Date.now()}`;
 
-      // Update profiles record
       const { data: updatedProfile, error: dbError } = await supabase
         .from('profiles')
         .update({ avatar_url: refreshedUrl })
@@ -189,7 +177,6 @@ function ProfileSection({ profile, email, userId, onProfileUpdate }) {
     }
   }
 
-  // Save personal information
   async function handleSavePersonal(e) {
     e.preventDefault();
     setPersonalMessage({ text: '', type: '' });
@@ -226,7 +213,6 @@ function ProfileSection({ profile, email, userId, onProfileUpdate }) {
     }
   }
 
-  // Change password
   async function handleChangePassword(e) {
     e.preventDefault();
     setPasswordMessage({ text: '', type: '' });
@@ -254,7 +240,6 @@ function ProfileSection({ profile, email, userId, onProfileUpdate }) {
     setIsChangingPassword(true);
 
     try {
-      // Re-authenticate user with current password to verify identity
       const { error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password: passwordData.currentPassword,
@@ -280,7 +265,6 @@ function ProfileSection({ profile, email, userId, onProfileUpdate }) {
     }
   }
 
-  // Save timezone
   async function handleSaveTimezone(e) {
     e.preventDefault();
     setTimezoneMessage({ text: '', type: '' });
@@ -306,7 +290,6 @@ function ProfileSection({ profile, email, userId, onProfileUpdate }) {
     }
   }
 
-  // Current time preview in chosen timezone
   let previewTime = '';
   try {
     previewTime = new Date().toLocaleTimeString(undefined, {
@@ -329,7 +312,6 @@ function ProfileSection({ profile, email, userId, onProfileUpdate }) {
       </div>
 
       <div className="profile-layout">
-        {/* Avatar Upload Card */}
         <div className="profile-card profile-avatar-card">
           <div className="profile-avatar-wrapper">
             {avatarUrl ? (
@@ -394,7 +376,6 @@ function ProfileSection({ profile, email, userId, onProfileUpdate }) {
           )}
         </div>
 
-        {/* Tab Options Navigation */}
         <div className="profile-tabs">
           <button
             type="button"
@@ -419,7 +400,6 @@ function ProfileSection({ profile, email, userId, onProfileUpdate }) {
           </button>
         </div>
 
-        {/* Tab 1: Personal Information Card */}
         {activeTab === 'personal' && (
           <div className="profile-card">
             <div className="profile-card-header">
@@ -487,7 +467,6 @@ function ProfileSection({ profile, email, userId, onProfileUpdate }) {
           </div>
         )}
 
-        {/* Tab 2: Change Password Card */}
         {activeTab === 'password' && (
           <div className="profile-card">
             <div className="profile-card-header">
@@ -584,7 +563,6 @@ function ProfileSection({ profile, email, userId, onProfileUpdate }) {
           </div>
         )}
 
-        {/* Tab 3: Timezone Card */}
         {activeTab === 'timezone' && (
           <div className="profile-card">
             <div className="profile-card-header">
