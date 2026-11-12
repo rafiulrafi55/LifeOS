@@ -1,17 +1,17 @@
 # Dependencies
-node_modules/
+#node_modules/
 
 # Build output
 dist/
 frontend/dist/
 
 # Environment variables
-.env
-.env.*
-!.env.example
+#.env
+#.env.*
+#!.env.example
 
 # Vite
-.vite/
+#.vite/
 
 # Logs
 npm-debug.log*
@@ -19,5 +19,5 @@ yarn-debug.log*
 pnpm-debug.log*
 
 # OS
-.DS_Store
-Thumbs.db
+#.DS_Store
+#Thumbs.db
