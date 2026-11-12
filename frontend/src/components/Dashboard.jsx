@@ -70,6 +70,10 @@ function Dashboard({ session }) {
     setData((currentData) => currentData ? { ...currentData, notes } : currentData);
   }
 
+  function updateTasks(tasks) {
+    setData((currentData) => currentData ? { ...currentData, tasks } : currentData);
+  }
+
   function updateProfile(updatedProfile) {
     setData((currentData) =>
       currentData ? { ...currentData, profile: { ...currentData.profile, ...updatedProfile } } : currentData
@@ -101,7 +105,13 @@ function Dashboard({ session }) {
 
           <div className="workspace-main">
             {activeSection === 'overview' && <OverviewSection data={data} displayName={displayName} />}
-            {activeSection === 'tasks' && <TasksSection tasks={data.tasks} />}
+            {activeSection === 'tasks' && (
+              <TasksSection
+                tasks={data.tasks}
+                userId={session.user.id}
+                onTasksChange={updateTasks}
+              />
+            )}
             {activeSection === 'goals' && <GoalsSection goals={data.goals} />}
             {activeSection === 'notes' && <NotesSection notes={data.notes} userId={session.user.id} onNotesChange={updateNotes} />}
             {activeSection === 'finance' && <FinanceSection finances={data.finances} />}
