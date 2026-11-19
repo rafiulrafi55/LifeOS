@@ -150,8 +150,10 @@ function FinanceSection({ finances, userId, onFinancesChange }) {
               <button className="icon-action" onClick={closeForm} aria-label="Close form"><X size={18} /></button>
             </div>
             <form onSubmit={saveFinance}>
-              <label>Type<select name="type" value={form.type} onChange={updateField}>{types.map((type) => <option key={type} value={type}>{label(type)}</option>)}</select></label>
-              <label>Amount<input name="amount" type="number" step="0.01" value={form.amount} onChange={updateField} placeholder="0.00" autoFocus /></label>
+              <div className="field-row">
+                <label>Type<select name="type" className="profile-select" value={form.type} onChange={updateField}>{types.map((type) => <option key={type} value={type}>{label(type)}</option>)}</select></label>
+                <label>Amount<input name="amount" type="number" step="0.01" value={form.amount} onChange={updateField} placeholder="0.00" autoFocus /></label>
+              </div>
               <label>Category<input name="category" value={form.category} onChange={updateField} placeholder="e.g. Salary, Rent, Food" /></label>
               <label>Description<input name="description" value={form.description} onChange={updateField} placeholder="Optional details..." /></label>
               <label>Date<input name="transaction_date" type="date" value={form.transaction_date} onChange={updateField} /></label>

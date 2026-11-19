@@ -131,8 +131,8 @@ function GoalsSection({ goals, userId, onGoalsChange }) {
               </div>
               <div className="record-meta">
                 <span className="badge">{label(goal.status)}</span>
-                <span className="badge">{goal.progress}%</span>
-                {goal.target_date && <span>{new Date(goal.target_date).toLocaleDateString()}</span>}
+                <span className="badge badge-progress">{goal.progress}%</span>
+                {goal.target_date && <span className="record-date">{new Date(goal.target_date).toLocaleDateString()}</span>}
                 <button className="icon-action" onClick={() => openEdit(goal)} aria-label={`Edit ${goal.title}`} title="Edit goal"><Pencil size={15} /></button>
                 <button className="icon-action danger" onClick={() => removeGoal(goal)} aria-label={`Delete ${goal.title}`} title="Delete goal"><Trash2 size={15} /></button>
               </div>
