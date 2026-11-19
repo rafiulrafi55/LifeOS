@@ -66,6 +66,10 @@ function Dashboard({ session }) {
     await supabase.auth.signOut();
   }
 
+  function updateFinances(finances) {
+    setData((currentData) => currentData ? { ...currentData, finances } : currentData);
+  }
+
   function updateNotes(notes) {
     setData((currentData) => currentData ? { ...currentData, notes } : currentData);
   }
@@ -114,7 +118,13 @@ function Dashboard({ session }) {
             )}
             {activeSection === 'goals' && <GoalsSection goals={data.goals} />}
             {activeSection === 'notes' && <NotesSection notes={data.notes} userId={session.user.id} onNotesChange={updateNotes} />}
-            {activeSection === 'finance' && <FinanceSection finances={data.finances} />}
+            {activeSection === 'finance' && (
+              <FinanceSection
+                finances={data.finances}
+                userId={session.user.id}
+                onFinancesChange={updateFinances}
+              />
+            )}
             {activeSection === 'events' && <EventsSection events={data.events} />}
             {activeSection === 'profile' && (
               <ProfileSection
