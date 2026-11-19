@@ -51,7 +51,7 @@ function FinanceSection({ finances, userId, onFinancesChange }) {
     event.preventDefault();
     const amount = Number(form.amount);
     if (!form.category.trim() || isNaN(amount) || amount <= 0) {
-      setError('Please provide a valid category and amount.');
+      setError('Please provide a valid category and amount');
       return;
     }
 

@@ -52,7 +52,7 @@ function GoalsSection({ goals, userId, onGoalsChange }) {
     event.preventDefault();
     const title = form.title.trim();
     if (!title) {
-      setError('Please provide a goal title.');
+      setError('Please provide a goal title');
       return;
     }
 
