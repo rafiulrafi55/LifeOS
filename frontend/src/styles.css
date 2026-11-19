@@ -129,7 +129,7 @@ input:focus { border-color: #a3813e; box-shadow: 0 0 0 3px rgba(208, 169, 79, .1
 .notes-empty { display: grid; place-items: center; gap: 9px; min-height: 220px; border: 1px dashed #d2d2c8; color: #a0a69f; }
 .notes-empty p { margin: 0; font-size: 13px; }
 .modal-backdrop { position: fixed; z-index: 10; inset: 0; display: grid; place-items: center; padding: 24px; background: rgba(35, 49, 43, .42); }
-.note-form-modal { width: min(100%, 560px); padding: 26px; border: 1px solid #dedbd2; border-radius: 6px; background: #fffefa; box-shadow: 0 20px 60px rgba(35, 49, 43, .18); }
+.note-form-modal { width: min(100%, 560px); padding: 26px; border: 1px solid #dedbd2; border-radius: 6px; background: #fffefa; box-shadow: 0 20px 60px rgba(35, 49, 43, .18); max-height: 80vh; overflow-y: auto; }
 .modal-heading { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
 .modal-heading h2 { margin: 0; color: #23443a; font-size: 25px; letter-spacing: -.03em; }
 .modal-heading .eyebrow { margin-bottom: 7px; }
