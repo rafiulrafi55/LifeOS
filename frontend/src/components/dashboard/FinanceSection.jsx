@@ -3,6 +3,11 @@ import { Pencil, Plus, Trash2, X } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
 const emptyForm = { type: 'expense', amount: '', category: '', description: '', transaction_date: new Date().toISOString().split('T')[0] };
+const types = ['income', 'expense'];
+
+function label(value) {
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
 
 function FinanceSection({ finances, userId, onFinancesChange }) {
   const [form, setForm] = useState(emptyForm);
@@ -124,7 +129,7 @@ function FinanceSection({ finances, userId, onFinancesChange }) {
                 {entry.description && <p className="record-sub">{entry.description}</p>}
               </div>
               <div className="record-meta">
-                <span className="badge">{entry.type}</span>
+                <span className="badge">{label(entry.type)}</span>
                 <span className={entry.type === 'income' ? 'amount-positive' : 'amount-negative'}>
                   {entry.type === 'income' ? '+' : '-'}${Number(entry.amount).toFixed(2)}
                 </span>
@@ -145,7 +150,7 @@ function FinanceSection({ finances, userId, onFinancesChange }) {
               <button className="icon-action" onClick={closeForm} aria-label="Close form"><X size={18} /></button>
             </div>
             <form onSubmit={saveFinance}>
-              <label>Type<select name="type" value={form.type} onChange={updateField}><option value="income">Income</option><option value="expense">Expense</option></select></label>
+              <label>Type<select name="type" value={form.type} onChange={updateField}>{types.map((type) => <option key={type} value={type}>{label(type)}</option>)}</select></label>
               <label>Amount<input name="amount" type="number" step="0.01" value={form.amount} onChange={updateField} placeholder="0.00" autoFocus /></label>
               <label>Category<input name="category" value={form.category} onChange={updateField} placeholder="e.g. Salary, Rent, Food" /></label>
               <label>Description<input name="description" value={form.description} onChange={updateField} placeholder="Optional details..." /></label>

@@ -66,6 +66,10 @@ function Dashboard({ session }) {
     await supabase.auth.signOut();
   }
 
+  function updateGoals(goals) {
+    setData((currentData) => currentData ? { ...currentData, goals } : currentData);
+  }
+
   function updateFinances(finances) {
     setData((currentData) => currentData ? { ...currentData, finances } : currentData);
   }
@@ -116,7 +120,13 @@ function Dashboard({ session }) {
                 onTasksChange={updateTasks}
               />
             )}
-            {activeSection === 'goals' && <GoalsSection goals={data.goals} />}
+            {activeSection === 'goals' && (
+              <GoalsSection
+                goals={data.goals}
+                userId={session.user.id}
+                onGoalsChange={updateGoals}
+              />
+            )}
             {activeSection === 'notes' && <NotesSection notes={data.notes} userId={session.user.id} onNotesChange={updateNotes} />}
             {activeSection === 'finance' && (
               <FinanceSection
