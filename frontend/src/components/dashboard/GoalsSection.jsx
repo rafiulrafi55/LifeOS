@@ -151,7 +151,7 @@ function GoalsSection({ goals, userId, onGoalsChange }) {
             <form onSubmit={saveGoal}>
               <label>Title<input name="title" value={form.title} onChange={updateField} placeholder="What do you want to achieve?" autoFocus /></label>
               <label>Description<textarea name="description" value={form.description} onChange={updateField} placeholder="Add useful context..." rows="3" /></label>
-              <label>Status<select name="status" value={form.status} onChange={updateField}>{statuses.map((s) => <option key={s} value={s}>{label(s)}</option>)}</select></label>
+              <label>Status<select name="status" className="profile-select" value={form.status} onChange={updateField}>{statuses.map((s) => <option key={s} value={s}>{label(s)}</option>)}</select></label>
               <label>Progress (%)<input name="progress" type="number" min="0" max="100" value={form.progress} onChange={updateField} /></label>
               <label>Deadline<input name="target_date" type="date" value={form.target_date} onChange={updateField} /></label>
               <div className="modal-actions"><button type="button" className="secondary-button" onClick={closeForm}>Cancel</button><button type="submit" className="submit-button" disabled={busy}>{busy ? 'Saving...' : 'Save goal'}</button></div>
